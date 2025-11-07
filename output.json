@@ -1,0 +1,21 @@
+{
+  "answer": {
+    "type": "string",
+    "description": "The generated answer based on the policy documents",
+    "required": true,
+    "example": "According to the policy documents, the company allows remote work..."
+  },
+  "sources": {
+    "type": "array",
+    "items": {
+      "type": "string"
+    },
+    "description": "Relevant source chunks from the policy documents used to generate the answer",
+    "required": true,
+    "example": [
+      "[Document 1]\nThe company supports remote work arrangements...",
+      "[Document 2]\nRemote employees must maintain regular communication..."
+    ]
+  }
+}
+

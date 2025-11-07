@@ -1,0 +1,9 @@
+{
+  "question": {
+    "type": "string",
+    "description": "The question to ask about the policy documents",
+    "required": true,
+    "example": "What is the company's remote work policy?"
+  }
+}
+
