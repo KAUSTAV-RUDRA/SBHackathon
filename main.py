@@ -38,6 +38,13 @@ def initialize_components():
     """Initialize RAG components."""
     global embedder, retriever, summarizer
     
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key or api_key == "your_api_key_here" or api_key == "your_gemini_api_key_here":
+        print("WARNING: GEMINI_API_KEY not set or using placeholder value.")
+        print("   The server will start, but you need to set a valid API key in .env to use the features.")
+        print("   Get your API key from: https://makersuite.google.com/app/apikey")
+        return
+    
     try:
         embedder = GeminiEmbedder()
         retriever = FAISSRetriever(embedder)
@@ -45,14 +52,19 @@ def initialize_components():
         
         # Try to load existing index
         retriever.load_index()
+        print("RAG components initialized successfully")
     except Exception as e:
-        print(f"Warning: Could not initialize components: {e}")
+        print(f"WARNING: Could not initialize components: {e}")
+        print("   The server will start, but RAG features may not work.")
 
 
 # Initialize on startup
 @app.on_event("startup")
 async def startup_event():
     initialize_components()
+
+# Also initialize on module load (for compatibility)
+initialize_components()
 
 
 # Request/Response models
