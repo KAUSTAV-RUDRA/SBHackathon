@@ -20,7 +20,7 @@ class GeminiEmbedder:
             raise ValueError("GEMINI_API_KEY not found in environment variables")
         
         genai.configure(api_key=self.api_key)
-        self.model = genai.GenerativeModel('models/embedding-001')
+        self.model_name = 'models/embedding-001'
     
     def embed_text(self, text: str) -> List[float]:
         """
@@ -33,7 +33,7 @@ class GeminiEmbedder:
             Embedding vector as a list of floats
         """
         try:
-            result = self.model.embed_content(text)
+            result = genai.embed_content(model=self.model_name, content=text)
             return result['embedding']
         except Exception as e:
             raise Exception(f"Error generating embedding: {str(e)}")

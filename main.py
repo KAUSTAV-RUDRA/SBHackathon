@@ -8,10 +8,10 @@ import json
 from dotenv import load_dotenv
 import shutil
 
-from rag.embedder import GeminiEmbedder
+from rag.ollama_embedder import OllamaEmbedder
 from rag.retriever import FAISSRetriever
 from rag.chunker import chunk_text
-from rag.summarizer import GeminiSummarizer
+from rag.ollama_summarizer import OllamaSummarizer
 from utils.pdf_reader import extract_text_from_pdf_bytes
 
 # Load environment variables
@@ -38,18 +38,16 @@ def initialize_components():
     """Initialize RAG components."""
     global embedder, retriever, summarizer
     
-    api_key = os.getenv("GEMINI_API_KEY")
-    if not api_key or api_key == "your_api_key_here" or api_key == "your_gemini_api_key_here":
-        print("WARNING: GEMINI_API_KEY not set or using placeholder value.")
-        print("   The server will start, but you need to set a valid API key in .env to use the features.")
-        print("   Get your API key from: https://makersuite.google.com/app/apikey")
-        return
-    
+    # Initialize with local Ollama (no API key needed)
     try:
-        embedder = GeminiEmbedder()
+        # Use default embedding model (e.g., 'nomic-embed-text') unless overridden by env
+        embedder = OllamaEmbedder()
+        print("Connected to Ollama embedder successfully")
+        # Initialize other components
         retriever = FAISSRetriever(embedder)
-        summarizer = GeminiSummarizer()
-        
+        # Use default generation model (e.g., 'llama3') unless overridden by env
+        summarizer = OllamaSummarizer()
+
         # Try to load existing index
         retriever.load_index()
         print("RAG components initialized successfully")
